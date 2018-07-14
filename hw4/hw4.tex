@@ -1,0 +1,323 @@
+\documentclass[12pt]{article}
+\usepackage[top=0.9in, bottom=0.9in, left=0.5in, right=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+
+\setenumerate{parsep=0em, listparindent=\parindent}
+
+% Reset equation numbering for each new item in an enumerate environment.
+\makeatletter
+\@addtoreset{equation}{enumi}
+\makeatother
+
+% Hacky macro to reset equation numbering within sections and subsections. See:
+% https://tex.stackexchange.com/questions/264335/when-using-section-counters-dont-reset-properly-how-to-fix-this
+\makeatletter
+\def\nullstepcounter#1{%
+	\begingroup
+		\let\@elt\@stpelt
+		\csname cl@#1\endcsname
+	\endgroup}
+\makeatother
+
+\counterwithin*{equation}{section}
+\counterwithin*{equation}{subsection}
+
+\DeclareMathOperator{\rank}{rank}
+
+\title{Homework 4}
+\author{Benjamin Noland}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Section 2.6}
+
+\begin{enumerate}
+\setcounter{enumi}{9}
+\item
+\begin{enumerate}
+\item
+First, define polynomials $p_0, \dots, p_n \in V$ as follows:
+\begin{equation*}
+p_j(x) = \prod_{\substack{i = 0 \\ i \neq j}}^n \frac{x - c_i}{c_j - c_i} \quad (0 \leq j \leq n).
+\end{equation*}
+Then for any $0 \leq j \leq n$ and $0 \leq k \leq n$, we have:
+\begin{equation*}
+p_j(c_k) = \prod_{\substack{i = 0 \\ i \neq j}}^n \frac{c_k - c_i}{c_j - c_i} = \delta_{jk}.
+\end{equation*}
+Now let $a_0, \dots, a_n \in F$ be scalars such that
+\begin{equation*}
+0 = \sum_{k=0}^n a_k f_k
+\end{equation*}
+(here $0$ denotes the zero linear functional on $V$). Then for any $0 \leq j \leq n$,
+\begin{equation*}
+0 = \sum_{k=0}^n a_k f_k(p_j) = \sum_{k=0}^n a_k p_j(c_k) = \sum_{k=0}^n a_k \delta_{jk} = a_j.
+\end{equation*}
+Therefore $a_0 = \cdots = a_n = 0$, so that the set $\beta = \{f_0, \dots, f_n\}$ is linearly independent. Since $V$ is finite-dimensional with $\dim(V) = n+1$, $V^\ast$ is also finite-dimensional with $\dim(V^\ast) = n+1$ (see the remark at the bottom of pg. 119). Thus $\beta$ is a basis for $V^\ast$ by part (b) of Cor. 2 to Thm. 1.10.
+
+\item
+Since $\beta^\ast = \{f_0, \dots, f_n\}$ is an ordered basis for $V^\ast$ by part (a), the Cor. to Thm. 2.26 implies the existence of an ordered basis $\beta = \{p_0, \dots, p_n\}$ for $V$ which has $\beta^\ast$ as its dual. In particular, this means we have:
+\begin{equation*}
+\delta_{ij} = f_j(p_i) = p_i(c_j) \quad (0 \leq i \leq n, 0 \leq j \leq n).
+\end{equation*}
+To see that $p_0, \dots, p_n$ are the unique polynomials in $V$ with the required property, suppose that for each $1 \leq i \leq n$ there exists another polynomial $q_i \in V$ satisfying
+\begin{equation*}
+q_i(c_j) = \delta_{ij} \quad (0 \leq j \leq n).
+\end{equation*}
+Since $\beta$ is a basis for $V$, there exist scalars $a_0, \dots, a_n \in F$ such that
+\begin{equation} \label{eq:1}
+q_i = \sum_{k=0}^n a_k p_k.
+\end{equation}
+Then for any $0 \leq j \leq n$, we have:
+\begin{equation*}
+\delta_{ij} = q_i(c_j) = \sum_{k=0}^n a_k p_k(c_j) = \sum_{k=0}^n a_k \delta_{jk} = a_j.
+\end{equation*}
+Plugging these values for $a_0, \dots, a_n$ back into (\ref{eq:1}), we get
+\begin{equation*} \label{eq:1}
+q_i = \sum_{k=0}^n \delta_{ik} p_k = p_i.
+\end{equation*}
+Thus the polynomials $p_0, \dots, p_n$ are the unique polynomials in $V$ with the required property.
+
+\item
+% TODO: For some reason the equation counter doesn't reset for inner enumerate environments. This is a hack for now.
+\setcounter{equation}{0}
+
+Let $\beta = \{p_0, \dots, p_n\}$ be the ordered basis described in part (b). Then for any $q \in V$ there exist unique scalars $b_0, \dots b_n \in F$ such that
+\begin{equation} \label{eq:1}
+q = \sum_{i=0}^n b_i p_i
+\end{equation}
+For any $0 \leq j \leq n$, we have:
+\begin{equation*}
+q(c_j) = \sum_{i=0}^n b_i p_i(c_j) = \sum_{i=0}^n b_i \delta_{ij} = b_j.
+\end{equation*}
+Thus we may write (\ref{eq:1}) as
+\begin{equation*}
+q = \sum_{i=0}^n q(c_i) p_i.
+\end{equation*}
+In particular, if $q$ is the unique polynomial in $V$ satisfying
+\begin{equation} \label{eq:2}
+q = \sum_{i=0}^n a_i p_i,
+\end{equation}
+for the given scalars $a_0, \dots, a_n$, then $q(c_i) = a_i$ ($0 \leq i \leq n$). Thus there exists a unique polynomial in $q \in V$ with the required property, given by (\ref{eq:2}).
+
+\item
+I already deduced this in part (c).
+
+\item
+Let $p \in V$. By the result of part (c), we can write
+\begin{equation*}
+p(x) = \sum_{i=0}^n p(c_i) p_i(x) \quad (x \in F)
+\end{equation*}
+In particular, if $V = P_n(\mathbb{R})$, we have:
+\begin{equation*}
+\int_a^b p(t) \, dt = \int_a^b \sum_{i=0}^n p(c_i) p_i(t) \, dt = \sum_{i=0}^n p(c_i) \int_a^b p_i(t) \, dt = \sum_{i=0}^n p(c_i) d_i.
+\end{equation*}
+
+\end{enumerate}
+
+\end{enumerate}
+
+\section*{Additional problem}
+\nullstepcounter{section}
+
+We need to show that $(F[t])^\ast \cong F[[x]]$, but we need a lemma first.
+
+\bigskip
+{\it Lemma:} Let $V$ and $W$ be vector spaces over the field $F$, let $\beta = \{v_i\}_{i \in I}$ be a basis (not necessarily finite) for $V$, and let $\{w_i\}_{i \in I}$ be a collection of vectors in $W$. Then there exists a unique linear transformation $T : V \to W$ satisfying $T(v_i) = w_i$ for every $i \in I$.
+
+{\it Proof:} Let $x \in V$. Then there exist vectors $v_{i_1}, \dots, v_{i_n} \in \beta$ and unique scalars $a_1, \dots, a_n \in F$ such that
+\begin{equation} \label{eq:1}
+x = \sum_{k=1}^n a_k v_{i_k}.
+\end{equation}
+(Note that if $x \neq 0$ the vectors $v_{i_1}, \dots, v_{i_n}$ are unique as well). Define a map $T : V \to W$ by
+\begin{equation*}
+T(x) = \sum_{k=1}^n a_k w_{i_k}.
+\end{equation*}
+(Note that if $x = 0$, then $a_1 = \cdots = a_n = 0$ regardless of the values of the vectors $v_{i_1}, \dots, v_{i_n}$, so that $T(x) = 0$ unambiguously. Hence this map is well-defined). Thus we see that $T(v_i) = w_i$ for every $i \in I$, as desired. To see that $T$ is a linear transformation, let $x, y \in V$ and $c \in F$. Then there exist vectors $v_{i_1}, \dots, v_{i_n}, v_{i_{n+1}}, \dots, v_{i_{n+m}} \in \beta$ and unique scalars $a_1, \dots, a_n, a_{n+1}, \dots, a_{n+m} \in F$ satisfying
+\begin{equation*}
+x = \sum_{k=1}^n a_k v_{i_k} \quad \text{and} \quad y = \sum_{k=1}^m a_{n+k} v_{i_{n+k}}.
+\end{equation*}
+Therefore
+\begin{equation*}
+T(cx+y) = T\left(\sum_{k=1}^n c a_k v_{i_k} + \sum_{k=1}^m a_{n+k} v_{i_{n+k}}\right) = \sum_{k=1}^n c a_k w_{i_k} + \sum_{k=1}^m a_{n+k} w_{i_{n+k}} = cT(x) + T(y),
+\end{equation*}
+so that $T$ is a linear transformation. Finally, to see that $T$ is unique, let $U : V \to W$ be a linear transformation such that $U(v_i) = w_i$ for every $i \in I$. Let $x \in V$, with
+\begin{equation*}
+x = \sum_{k=1}^n a_k v_{i_k},
+\end{equation*}
+as in (\ref{eq:1}). Then
+\begin{equation*}
+U(x) = \sum_{k=1}^n a_k U(v_{i_k}) = \sum_{k=1}^n a_k w_{i_k} = T(x).
+\end{equation*}
+Thus $T$ is unique, completing the proof.
+
+\bigskip
+Now for the main problem. Recall that the set $\beta = \{1, t, t^2, t^3, \dots\}$ is a basis for $F[t]$. Define a map $\psi : (F[t])^\ast \to F[[x]]$ by
+\begin{equation*}
+\psi(f) = \sum_{k=0}^\infty f(t^k) x^k \quad (f \in (F[t])^\ast).
+\end{equation*}
+Now let $f, g \in (F[t])^\ast$ and $c \in F$. Then
+\begin{equation*}
+\psi(cf+g) = \sum_{k=0}^\infty (cf+g)(t^k) x^k = \sum_{k=0}^\infty [cf(t^k) + g(t^k)] x^k = c\sum_{k=0}^\infty f(t^k) x^k + \sum_{k=0}^\infty g(t^k) x^k = c\psi(f) + \psi(g).
+\end{equation*}
+Thus $\psi$ is a linear transformation.
+
+To see that $\psi$ is injective, let $f, g \in (F[t])^\ast$, with $f \neq g$. Then by the lemma there exists a basis element $t^m \in \beta$ such that $f(t^m) \neq g(t^m)$. It follows that
+\begin{equation*}
+\psi(f) = \sum_{k=0}^\infty f(t^k) x^k \neq \sum_{k=0}^\infty g(t^k) x^k = \psi(g).
+\end{equation*}
+Thus $\psi$ is injective. To see that $\psi$ is surjective, let $\sum_{k=0}^\infty a_k x^k \in F[[x]]$. Then by the lemma there exists $f \in (F[t])^\ast$ such that $f(t^k) = a_k$ for every $k \geq 0$. Therefore
+\begin{equation*}
+\psi(f) = \sum_{k=0}^\infty f(t^k) x^k = \sum_{k=0}^\infty a_k x^k.
+\end{equation*}
+Thus $\psi$ is surjective. Therefore $\psi$ is bijective, and hence an isomorphism. Thus $(F[t])^\ast \cong F[[x]]$, as desired.
+
+\section*{Section 2.7}
+
+\begin{enumerate}
+\setcounter{enumi}{10}
+\item
+Let $1 \leq i \leq k$ and $0 \leq j \leq n_i-1$. We need to show that $t^je^{c_it}$ is in the solution space of the differential equation in question. Note that by way of the Lemma to Thm. 2.34,
+\begin{equation*}
+(D-c_iI)^{n_i}(t^je^{c_it}) = 0.
+\end{equation*}
+Thus if $p(t) = (x-c_1)^{n_1} \cdots (x-c_k)^{n_k}$ (i.e., $p$ is the auxiliary polynomial of the differential equation in question), then
+\begin{equation*}
+p(D)(t^je^{c_it}) = (D-c_1I)^{n_1} \cdots (D-c_iI)^{n_i} \dots (D-c_kI)^{n_k}(t^je^{c_it}) = 0.
+\end{equation*}
+Thus $t^je^{c_it}$ is in the solution space. In particular, the set
+\begin{equation*}
+\beta_k = \{e^{c_1t}, te^{c_1t}, \dots, t^{n_1-1}e^{c_1t}, \dots, e_{c_kt}, te^{c_kt}, \dots, t^{n_k-1}e^{c_kt}\}
+\end{equation*}
+is contained in the solution space.
+
+By the Cor. to Thm. 2.32 and part (b) of Cor. 2 to Thm. 1.10, we need only verify that $\beta_k$ is linearly independent to show that it is a basis for the solution space (we are dealing with a differential equation of order $n = n_1 + \cdots + n_k$, and $\beta_k$ contains precisely $n$ elements). I will proceed by induction on $k$. When $k = 1$, the result is immediate from the Lemma to Thm. 2.34. Now suppose $\beta_{k-1}$ is linearly independent for some $k > 1$. Let $n_{k}$ be a positive integer and $c_{k}$ a complex number distinct from $c_1, \dots, c_{k-1}$. We want to show that the set
+\begin{equation*}
+\beta_{k} = \beta_{k-1} \cup \{e^{c_kt}, te^{c_kt}, \dots, t^{n_k-1}e^{c_kt}\}
+\end{equation*}
+is linearly independent. Let $a_{ij}$ $(1 \leq i \leq k, 0 \leq j \leq n_i - 1)$ be scalars such that
+\begin{equation} \label{eq:1}
+0 = \sum_{i=1}^k \sum_{j=0}^{n_i-1} a_{ij} t^je^{c_it}.
+\end{equation}
+
+First, we want to show that $a_{km} = 0$ for every $0 \leq m \leq n_k-1$. I will proceed by (strong) induction. Assume that $a_{km} = 0$ for every $1 \leq m < n_k-1$. We want to show that $a_{k,(n_k-1)} = 0$ as well. Define the differential operator
+\begin{equation*}
+\widetilde{D} = (D-c_kI)^{n_k-1}(D-c_{k-1}I)^{n_{k-1}} \cdots (D-c_1I)^{n_1}.
+\end{equation*}
+From some computations done in class, we know the following:
+\begin{itemize}
+\item
+$(D-c_iI)^{n_i}(t^je^{c_it}) = 0$ $(1 \leq i \leq k-1, 0 \leq j \leq n_i-1)$
+\item
+$(D-c_iI)^{n_i}(e^{c_kt}) = (c_k - c_i)^{n_i} e^{c_kt}$ $(1 \leq i \leq k-1)$
+\item
+$(D-c_kI)^{n_k-1}(t^{n_k-1}e^{c_kt}) = (n_k-1)! \, e^{c_kt}$.
+\end{itemize}
+It follows that $\widetilde{D}(t^je^{c_it}) = 0$, and
+\begin{equation*}
+\widetilde{D}(t^{n_k-1}e^{c_kt}) = (c_k-c_{k-1})^{n_{k-1}} \cdots (c_k-c_1)^{n_1} (n_k-1)! \, e^{c_kt}.
+\end{equation*}
+Since $a_{km} = 0$ for every $1 \leq m < n_k-1$ by assumption, (\ref{eq:1}) reduces to
+\begin{equation} \label{eq:2}
+0 = \sum_{i=1}^k \sum_{j=0}^{n_i-1} a_{ij} t^je^{c_it} = \sum_{i=1}^{k-1} \sum_{j=0}^{n_i-1} a_{ij} t^je^{c_it} + \sum_{j=0}^{n_k-1} a_{kj}t^j e^{c_kt} = \sum_{i=1}^{k-1} \sum_{j=0}^{n_i-1} a_{ij} t^je^{c_it} + a_{k,(n_k-1)}t^{n_k-1} e^{c_kt}.
+\end{equation}
+Applying the operator $\widetilde{D}$ to both sides of (\ref{eq:2}) yields the following:
+\begin{align*}
+0 = \widetilde{D}\left(\sum_{i=1}^{k-1} \sum_{j=0}^{n_i-1} a_{ij} t^je^{c_it} + a_{k,(n_k-1)}t^{n_k-1} e^{c_kt}\right)
+&= \sum_{i=1}^{k-1} \sum_{j=0}^{n_i-1} a_{ij} \widetilde{D}(t^je^{c_it}) + a_{k,(n_k-1)}\widetilde{D}(t^{n_k-1} e^{c_kt}) \\
+&= a_{k,(n_k-1)} (c_k-c_{k-1})^{n_{k-1}} \cdots (c_k-c_1)^{n_1} (n_k-1)! \, e^{c_kt}.
+\end{align*}
+Since the constants $c_1, \dots, c_k$ are distinct, $(c_k-c_{k-1})^{n_{k-1}} \cdots (c_k-c_1)^{n_1} (n_k-1)! \, e^{c_kt} \neq 0$ for any value of $t$, and therefore $a_{k,(n_k-1)} = 0$. Thus by the inductive hypothesis, it follows that $a_{km} = 0$ for every $0 \leq m \leq n_k-1$.
+
+Using this result, (\ref{eq:1}) reduces to
+\begin{equation*}
+0 = \sum_{i=1}^k \sum_{j=0}^{n_i-1} a_{ij} t^je^{c_it} = \sum_{i=1}^{k-1} \sum_{j=0}^{n_i-1} a_{ij} t^je^{c_it},
+\end{equation*}
+and since $\beta_{k-1}$ is linearly independent by the inductive hypothesis, $a_{ij} = 0$ for every $1 \leq i \leq k-1$ and $0 \leq j \leq n_i-1$. Thus we see that $a_{ij} = 0$ for every $1 \leq i \leq k$ and $0 \leq j \leq n_i-1$, so that $\beta_k$ is linearly independent as well. As noted above, this shows that $\beta_k$ is a basis for the solution space.
+
+\setcounter{enumi}{13}
+\item
+I will proceed by induction on $n$. When $n=1$, $x$ is a solution to a differential equation of the form
+\begin{equation} \label{eq:1}
+y' + a_0y = 0
+\end{equation}
+for some constant $a_0$. The condition on $x$ reduces to $x(t_0) = 0$ for some $t_0 \in \mathbb{R}$. By Thm 2.30, the solution space for the differential equation (\ref{eq:1}) has $\{e^{-a_0 t}\}$ as a basis. Therefore $x(t) = k e^{-a_0 t}$ for some constant $k \in \mathbb{C}$. Since $e^{-a_0 t_0} \neq 0$, the fact that $x(t_0) = 0$ implies that $k = 0$. Thus $x = 0$ identically.
+
+Now suppose the result holds for any $n$th order homogeneous linear differential equation with constant coefficients. Consider an $(n+1)$th order differential equation of this type with auxiliary polynomial $p$. Let $x$ be a solution to this equation that satisfies
+\begin{equation} \label{eq:2}
+x(t_0) = x'(t_0) = \dots = x^{(n)}(t_0) = 0
+\end{equation}
+for some $t_0 \in \mathbb{R}$. Since $p$ is of order $(n+1)$, it can be factored over $\mathbb{C}$ as $p(t) = (t-c)q(t)$, where $q$ is an $n$th order polynomial over $\mathbb{C}$, and $c \in \mathbb{C}$ is a constant. Say $q(t) = a_nt^n + \dots + a_1t + a_0$, and define $z$ by
+\begin{equation} \label{eq:3}
+z(t) = q(D)(x(t)) = (a_nD^n + \dots + a_1D + a_0I)(x(t)) = a_nx^{(n)}(t) + \dots + a_1x'(t) + a_0x(t).
+\end{equation}
+Thus by (\ref{eq:2}), $z(t_0) = 0$. Furthermore, note that
+\begin{equation*}
+0 = p(D)(x(t)) = (D-cI)q(D)(x(t)) = (D-cI)(z(t)),
+\end{equation*}
+so that $z$ is a solution to $y' - cy = 0$. By Thm. 2.30, the solution space to this differential equation has $\{e^{ct}\}$ as a basis, and thus $z(t) = ke^{ct}$ for some constant $k \in \mathbb{C}$. Since $e^{ct_0} \neq 0$, this implies that $k = 0$, so that $z = 0$ identically. Thus (\ref{eq:3}) reduces to
+\begin{equation*}
+0 = q(D)(x(t)).
+\end{equation*}
+That is, $x$ is a solution to an $n$th order homogeneous linear differential equation with constant coefficients. Since
+\begin{equation*}
+x(t_0) = x'(t_0) = \dots = x^{(n-1)}(t_0) = 0
+\end{equation*}
+in particular by (\ref{eq:1}), $x=0$ identically by the inductive hypothesis.
+
+\end{enumerate}
+
+\section*{Section 3.1}
+
+\begin{enumerate}
+\setcounter{enumi}{5}
+\item
+Suppose that $B$ can be obtained from $A$ by an elementary row operation. Then by Thm. 3.1 there exists an $m \times m$ elementary matrix $E$ such that $B = EA$. Then $B^t = (EA)^t = A^tE^t$. Note that $E^t$ can be obtained from the $m \times m$ identity matrix $I$ by performing the same operations that produced $E$ on the columns of $I$ rather than the rows (this is immediate from the definition of the transpose of a matrix).
+
+If $B$ is obtained from $A$ by an elementary column operation, then by Thm. 3.1 there exists an $n \times n$ elementary matrix $F$ such that $B = AF$. Then $B^t = (AF)^t = F^tA^t$, and an analogous argument to that above yields the desired result.
+
+\setcounter{enumi}{11}
+\item
+I will proceed by induction on the number of rows $m$. When $m=1$ the matrix is (trivially) upper triangular, since there are no entries below the diagonal. Now assume the result holds for any $(m-1) \times n$ matrix, where $m \geq 1$. Let $B$ be the matrix consisting of the upper $(m-1)$ rows of $A$. Then $B$ is an $(m-1) \times n$ matrix, and so by the inductive hypothesis may be transformed into an upper triangular matrix through a finite sequence of elementary row operations of types 1 and 3.
+
+If $m \leq n$, let $k = m-1$, and if $m > n$, let $k = n$, and for each of $j = 1, 2, \dots, k$ in sequence, perform the following operation:
+\begin{itemize}
+\item
+if $A_{jj} = 0$, swap row $j$ with row $m$ (a type 1 operation);
+\item
+if $A_{jj} \neq 0$, add $(-A_{mj}/A_{jj})$ times row $j$ to row $m$ (a type 3 operation).
+\end{itemize}
+In either case, we end up with $A_{mj} = 0$. Therefore, through a finite sequence of row operations of types 1 and 3, we obtain $A_{mj} = 0$ for each $1 \leq j \leq k$.
+
+To verify that the resulting matrix is upper triangular, first let $1 \leq i \leq m-1$ and $1 \leq j \leq n$ be such that $j < i$. Then $A_{ij} = B_{ij} = 0$ by the inductive hypothesis. Now let $1 \leq j \leq n$ be such that $j < m$. If $m \leq n$, then $k = m-1$, so that $1 \leq j \leq k$, and thus $A_{mj} = 0$. If $m > n$, then $k = n$, so that $1 \leq j \leq k$, and thus $A_{mj} = 0$. We therefore see that $A_{ij} = 0$ for any $1 \leq i \leq m$ and $1 \leq j \leq n$ with $j < i$, so that $A$ is upper triangular. Thus by way of the inductive hypothesis, we see that $A$ can be transformed into an upper triangular matrix through a finite sequence of row operations of types 1 and 3.
+
+\end{enumerate}
+
+\section*{Section 3.2}
+
+\begin{enumerate}
+\setcounter{enumi}{8}
+\item
+Let $A$ be an $m \times n$ matrix, and let $B$ be an $m \times n$ matrix obtained from $A$ through an elementary column operation. Then by Thm. 3.1 there exists an $n \times n$ elementary matrix $E$ with $B = AE$. By Thm. 3.2, $E$ is invertible, and thus by part (a) of Thm. 3.4,
+\begin{equation*}
+\rank(B) = \rank(AE) = \rank(A).
+\end{equation*}
+Thus elementary column operations preserve rank.
+
+\end{enumerate}
+
+\section*{Section 3.3}
+
+\begin{enumerate}
+\setcounter{enumi}{9}
+\item
+Let $Ax=b$ denote the system in question, and let $A_1, \dots, A_n \in F^m$ denote the $n$ column vectors of $A$. Note that since $\rank(A) = m$, we must have $m \leq n$, and by Thm. 3.5, $m$ is the maximum number of linearly independent columns of $A$. Therefore the set of $n + 1 > m$ elements $\{A_1, \dots, A_n, b\}$ in $F^m$ must be linearly dependent. Since these are simply the column vectors of the augmented matrix $(A|b)$, we therefore see that $\rank(A|b) = m$ as well by way of Thm. 3.5. The system therefore has a solution by Thm. 3.11.
+
+\end{enumerate}
+
+\end{document}

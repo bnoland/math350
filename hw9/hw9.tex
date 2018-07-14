@@ -1,0 +1,377 @@
+\documentclass[12pt]{article}
+\usepackage[top=0.9in, bottom=0.9in, left=0.5in, right=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+\usepackage{tikz}
+
+\setenumerate{parsep=0em, listparindent=\parindent}
+
+% Reset equation numbering for each new item in an enumerate environment.
+\makeatletter
+\@addtoreset{equation}{enumi}
+\makeatother
+
+% Hacky macro to reset equation numbering within sections and subsections. See:
+% https://tex.stackexchange.com/questions/264335/when-using-section-counters-dont-reset-properly-how-to-fix-this
+\makeatletter
+\def\nullstepcounter#1{%
+	\begingroup
+		\let\@elt\@stpelt
+		\csname cl@#1\endcsname
+	\endgroup}
+\makeatother
+
+\counterwithin*{equation}{section}
+\counterwithin*{equation}{subsection}
+
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\range}{range}
+
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+
+% For augmented matrices. See:
+% https://tex.stackexchange.com/questions/2233/whats-the-best-way-make-an-augmented-coefficient-matrix
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+	\hskip -\arraycolsep
+	\let\@ifnextchar\new@ifnextchar
+	\array{#1}}
+\makeatother
+
+\title{Homework 9}
+\author{Benjamin Noland}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Section 6.1}
+
+\begin{enumerate}
+\setcounter{enumi}{10}
+\item
+Let $x, y \in V$. We have the following:
+\begin{align*}
+\Vert x + y \Vert^2 + \Vert x - y \Vert^2 &= \langle x + y, x + y \rangle + \langle x - y, x - y \rangle \\
+&= \langle x, x + y \rangle + \langle y, x + y \rangle + \langle x, x - y \rangle - \langle y, x - y \rangle \\
+&= \langle x, x \rangle + \langle x, y \rangle + \langle y, x \rangle + \langle y, y \rangle + \langle x, x \rangle - \langle x, y \rangle - \langle y, x \rangle + \langle y, y \rangle \\
+&= 2\langle x, x \rangle + 2\langle y, y \rangle \\
+&= 2\Vert x \Vert^2 + 2\Vert y \Vert^2.
+\end{align*}
+In $\mathbb{R}^2$ this equation has the following interpretation: the sum of the squares of the lengths of the two diagonals of a parallelogram is equal to the sum of the squares of the lengths of its four sides.
+
+\setcounter{enumi}{26}
+\item
+\begin{enumerate}
+\setcounter{enumii}{1}
+\item
+Let $x, u, y \in V$. Then by the parallelogram law (exercise 11),
+\begin{equation} \label{eq:1}
+\Vert x + u + 2y \Vert^2 + \Vert x - u \Vert^2 = 2\Vert x + y \Vert^2 + 2\Vert u + y \Vert^2
+\end{equation}
+and
+\begin{equation} \label{eq:2}
+\Vert x + u - 2y \Vert^2 + \Vert x - u \Vert^2 = 2\Vert x - y \Vert^2 + 2\Vert u - y \Vert^2
+\end{equation}
+By subtracting (\ref{eq:2}) from (\ref{eq:1}), we get
+\begin{equation*}
+\Vert x + u + 2y \Vert^2 - \Vert x + u - 2y \Vert^2 = 2(\Vert x + y \Vert^2 - \Vert x - y \Vert^2) + 2(\Vert u + y \Vert^2 - \Vert u - y \Vert^2),
+\end{equation*}
+or equivalently,
+\begin{equation} \label{eq:3}
+4 \langle x + u, 2y \rangle = 8\langle x, y \rangle + 8\langle u, y \rangle.
+\end{equation}
+Thus since $4 \langle x + u, 2y \rangle = 8 \langle x + u, y \rangle$, multiplying both sides of $(\ref{eq:3})$ by $1/8$ yields
+\begin{equation*}
+\langle x + u, y \rangle = \langle x, y \rangle + \langle u, y \rangle.
+\end{equation*}
+
+\item
+Let $x, y \in V$. I will proceed by induction on $n$. When $n = 1$ the result holds trivially. Suppose that $\langle nx, y \rangle = n \langle x, y \rangle$ for some $n > 1$. Then by part (b),
+\begin{equation*}
+\langle (n+1)x, y \rangle = \langle nx + x, y \rangle = \langle nx, y \rangle + \langle x, y \rangle = n \langle x, y \rangle + \langle x, y \rangle = (n+1)\langle x, y \rangle.
+\end{equation*}
+So $\langle nx, y \rangle = n \langle x, y \rangle$ for every positive integer $n$ by induction.
+
+\end{enumerate}
+
+\setcounter{enumi}{27}
+\item
+Let $x, y, z \in V$ and $c \in \mathbb{R}$. Using basic properties of complex numbers, we get the following:
+\begin{enumerate}
+\item
+$[x+z, y] = \Re \langle x+z, y \rangle = \Re [\langle x, y \rangle + \langle z, y \rangle] = \Re \langle x, y \rangle + \Re \langle z, y \rangle = [x, y] + [z, y]$
+\item
+$[cx, y] = \Re \langle cx, y \rangle = \Re [c \langle x, y \rangle] = c \Re \langle x, y \rangle = c[x, y]$ (since $c \in \mathbb{R}$)
+\item
+$[x, y] = \Re \langle x, y \rangle = \Re \overline{\langle y, x \rangle} = \Re \langle y, x \rangle = [y, x]$
+\item
+If $x \neq 0$, then $\langle x, x \rangle > 0$ (note that $\langle x, x \rangle \in \mathbb{R}$). Thus $[x, x] = \Re \langle x, x \rangle = \langle x, x \rangle > 0$.
+\end{enumerate}
+Thus $[\cdot, \cdot]$ is an inner product for $V$ when $V$ is regarded as a vector space over $\mathbb{R}$. Finally, for any $x \in V$,
+\begin{equation*}
+[x, ix] = \Re \langle x, ix \rangle = \Re [\overline{i} \langle x, x \rangle] = \Re [-i\langle x, x \rangle] = 0.
+\end{equation*}
+This is due to the fact that since $\langle x, x \rangle \in \mathbb{R}$, the complex number $-i\langle x, x \rangle$ is pure imaginary and hence has no real part.
+
+\end{enumerate}
+
+\section*{Section 6.2}
+
+\begin{enumerate}
+\setcounter{enumi}{5}
+\item
+By Thm. 6.6 there exist unique vectors $y \in W^\bot$ and $z \in W$ such that $x = y + z$. Since $x \not \in W$, we must have $y \neq 0$. Therefore,
+\begin{equation*}
+\langle x, y \rangle = \langle y + z, y \rangle = \langle y, y \rangle + \langle z, y \rangle = \langle y, y \rangle \neq 0.
+\end{equation*}
+
+\setcounter{enumi}{9}
+\item
+By Thm. 6.6 and Thm. 5.10, $V = W \oplus W^\bot$, and thus the projection $T : V \to V$ on $W$ along $W^\bot$ exists. Let $x \in V$. Then there exist unique vectors $x_1 \in W$ and $x_2 \in W^\bot$ with $x = x_1 + x_2$. Notice that $x \in \ker T$ if and only if $0 = T(x) = x_1$, or equivalently, $x = x_2 \in W^\bot$. Therefore $\ker T = W^\bot$. Moreover, since $x_1$ and $x_2$ are orthogonal by definition,
+\begin{equation*}
+\Vert T(x) \Vert^2 = \Vert x_1 \Vert^2 \leq \Vert x_1 \Vert^2 + \Vert x_2 \Vert^2 = \Vert x_1 + x_2 \Vert^2 = \Vert x \Vert^2
+\end{equation*}
+by exercise 10 of section 6.1. Thus upon taking square roots,
+\begin{equation*}
+\Vert T(x) \Vert \leq \Vert x \Vert.
+\end{equation*}
+
+\end{enumerate}
+
+\section*{Section 6.3}
+
+\begin{enumerate}
+\setcounter{enumi}{16}
+\item
+Let $v \in \range(T^*)^\bot$. Then $\langle v, u \rangle_1 = 0$ for every $u \in \range(T^*)$; that is, for every $w \in W$, $0 = \langle v, T^*(w) \rangle_1 = \langle T(v), w \rangle_2$. In particular, since $T(v) \in W$, $\langle T(v), T(v) \rangle_2 = 0$, so that $T(v) = 0$. Thus $v \in \ker T$, so that $\range(T^*)^\bot \subseteq \ker T$. Conversely, let $v \in \ker T$. Then $T(v) = 0$, so that $0 = \langle T(v), w \rangle_2 = \langle v, T^*(w) \rangle_1$ for every $w \in W$; that is, $\langle v, u \rangle_1 = 0$ for every $u \in \range(T^*)$. Thus $v \in \range(T^*)^\bot$, so that $\ker T \subseteq \range(T^*)^\bot$. Therefore $\range(T^*)^\bot = \ker T$, as desired.
+
+\setcounter{enumi}{21}
+\item
+\begin{enumerate}
+\setcounter{enumii}{2}
+\item
+Let
+\begin{equation*}
+A = \begin{pmatrix}
+1 & 1 & -1 \\
+2 & -1 & 1 \\
+1 & -1 & 1
+\end{pmatrix} \quad \text{and} \quad
+b = \begin{pmatrix}
+0 \\
+3 \\
+2
+\end{pmatrix}.
+\end{equation*}
+We want to find a solution $u$ to the system $AA^*u = b$. We have
+\begin{equation*}
+A^* = \begin{pmatrix}
+1 & 2 & 1 \\
+1 & -1 & -1 \\
+-1 & 1 & 1
+\end{pmatrix},
+\end{equation*}
+and therefore
+\begin{equation*}
+AA^* = \begin{pmatrix}
+1 & 1 & -1 \\
+2 & -1 & 1 \\
+1 & -1 & 1
+\end{pmatrix}
+\begin{pmatrix}
+1 & 2 & 1 \\
+1 & -1 & -1 \\
+-1 & 1 & 1
+\end{pmatrix}
+= \begin{pmatrix}
+3 & 0 & -1 \\
+0 & 6 & 4 \\
+-1 & 4 & 3
+\end{pmatrix}.
+\end{equation*}
+Thus we can represent the system $AA^*u = b$ in matrix form as follows:
+\begin{equation*}
+\begin{pmatrix}[ccc|c]
+3 & 0 & -1 & 0 \\
+0 & 6 & 4 & 3 \\
+-1 & 4 & 3 & 2
+\end{pmatrix}
+\xrightarrow{\text{Row reduces to}}
+\begin{pmatrix}[ccc|c]
+1 & 0 & -1/3 & 0 \\
+0 & 1 & 2/3 & 1/2 \\
+0 & 0 & 0 & 0
+\end{pmatrix}.
+\end{equation*}
+One solution is therefore $u = (1, -3/2, 3)^t$. Now let
+\begin{equation*}
+s = A^*u = \begin{pmatrix}
+1 & 2 & 1 \\
+1 & -1 & -1 \\
+-1 & 1 & 1
+\end{pmatrix}
+\begin{pmatrix}
+1 \\
+-3/2 \\
+3
+\end{pmatrix}
+= \begin{pmatrix}
+1 \\
+-1/2 \\
+1/2
+\end{pmatrix}.
+\end{equation*}
+Then since $As = AA^*u = b$, the original system is consistent (i.e., it has a solution, namely $s$). So by Thm. 6.13, $s$ is the unique minimal solution to the original system.
+
+\end{enumerate}
+
+\end{enumerate}
+
+\iffalse
+\section*{Section 6.4}
+
+\begin{enumerate}
+\setcounter{enumi}{5}
+\item
+\begin{enumerate}
+\item
+By Thm. 6.11,
+\begin{equation*}
+T_1^* = \overline{\left(\frac{1}{2}\right)} (T^* + T^{**}) = \frac{1}{2} (T^* + T) = T_1 \\
+\end{equation*}
+and
+\begin{equation*}
+T_2^* = \overline{\left(\frac{1}{2i}\right)} (T^* - T^{**}) = \overline{\left(\frac{-i}{2}\right)} (T^* - T) = \frac{i}{2} (T^* - T) = \frac{-i}{2} (T - T^*) = \frac{1}{2i} (T - T^*) = T_2.
+\end{equation*}
+Thus $T_1$ and $T_2$ are both self-adjoint. Furthermore,
+\begin{equation*}
+T_1 + iT_2 = \frac{1}{2} (T + T^*) + \frac{1}{2} (T - T^*) = T.
+\end{equation*}
+
+\item
+Since $U_1$ and $U_2$ are self-adjoint and $T = U_1 + iU_2$,
+\begin{equation*}
+T^* = U_1^* + \overline{i} U_2^* = U_1 - iU_2.
+\end{equation*}
+Thus,
+\begin{equation*}
+T + T^* = 2U_1 \quad \text{and} \quad T - T^* = 2iU_2,
+\end{equation*}
+so that
+\begin{equation*}
+U_1 = \frac{1}{2} (T + T^*) = T_1 \quad \text{and} \quad U_2 = \frac{1}{2i} (T - T^*) = T_2.
+\end{equation*}
+
+\item
+Suppose that $T$ is normal, so that $TT^* = T^*T$. Then:
+\begin{align*}
+T_1 T_2 &= \left[\frac{1}{2} (T + T^*) \right ] \left[\frac{1}{2i} (T - T^*) \right ] = \frac{1}{4i} (T + T^*)(T - T^*) = \frac{1}{4i} [T^2 - TT^* + T^*T - (T^*)^2] \\
+&= \frac{1}{4i} [T^2 + T^*T - TT^* - (T^*)^2] = \frac{1}{4i} [T^2 + TT^* - T^*T - (T^*)^2] \\
+&= \frac{1}{4i} [T(T + T^*) - T^*(T + T^*)] = \frac{1}{4i} (T - T^*)(T + T^*) \\
+&= \left[\frac{1}{2} (T - T^*) \right ] \left[\frac{1}{2i} (T + T^*) \right ] = T_2 T_1.
+\end{align*}
+Conversely, suppose that $T_1 T_2 = T_2 T_1$. Then:
+\begin{align*}
+TT^* &= (T_1 + iT_2)(T_1 - iT_2) = T_1^2 - iT_1 T_2 + iT_2 T_1 + T_2^2 \\
+&= T_1^2 + iT_2 T_1 - iT_1 T_2 + T_2^2 = T_1^2 + iT_1 T_2 - iT_2 T_1 + T_2^2 \\
+&= T_1(T_1 + iT_2) - iT_2(T_1 + iT_2) \quad (\text{since $-1/i = i$}) \\
+&= (T_1 - iT_2)(T_1 + iT_2) = T^*T.
+\end{align*}
+So $T$ is normal.
+
+\end{enumerate}
+
+\item
+\begin{enumerate}
+\item
+For any $u, v \in W$,
+\begin{equation*}
+\langle T_W(u), v \rangle = \langle T(u), v \rangle = \langle u, T(v) \rangle = \langle u, T_W(v) \rangle
+\end{equation*}
+since $T$ is self-adjoint. Thus $T_W^* = T_W$, so that $T_W$ is self-adjoint as well.
+
+\item
+Let $v \in W^\bot$, and let $w \in W$. Then
+\begin{equation*}
+\langle T^*(v), w \rangle = \langle v, T(w) \rangle = 0
+\end{equation*}
+since $T(w) \in W$. Hence $T^*(v) \in W^\bot$, so that $W^\bot$ is $T^*$-invariant.
+
+\item
+For any $u, v \in W$,
+\begin{equation*}
+\langle T_W(u), v \rangle = \langle T(u), v \rangle = \langle u, T^*(v) \rangle = \langle u, (T^*)_W(v) \rangle
+\end{equation*}
+since $W$ is both $T$- and $T^*$-invariant. Thus $T_W^* = (T^*)_W$.
+
+\item
+Note since $W$ is both $T$- and $T^*$-invariant, the adjoint of $T_W$ exists by part (c), and is given by $T_W^* = (T^*)_W$. Since $T$ is normal, $TT^* = T^*T$. Thus for any $u \in W$,
+\begin{align*}
+(T_W T_W^*)(u) &= T_W(T_W^*(u)) = T_W((T^*)_W(u)) = T_W(T^*(u)) \\
+&= T(T^*(u)) = (TT^*)(u) = (T^*T)(u) = T^*(T(u)) \\
+&= T^*(T_W(u)) = (T^*)_W(T_W(u)) = T_W^*(T_W(u)) \\
+&= (T_W^*T_W)(u).
+\end{align*}
+Hence $T_W T_W^* = T_W^* T_W$, so that $T_W$ is normal.
+
+\end{enumerate}
+
+\end{enumerate}
+\fi
+
+\section*{Section 6.5}
+
+\begin{enumerate}
+\setcounter{enumi}{5}
+\item
+Note that for any $f \in V$,
+\begin{align} \label{eq:1}
+\begin{split}
+\Vert T(f) \Vert^2 &= \langle T(f), T(f) \rangle = \langle hf, hf \rangle \\
+&= \int_0^1 h(t)f(t) \overline{h(t)f(t)} \, dt = \int_0^1 f(t) \overline{f(t)} h(t) \overline{h(t)} \, dt \\
+&= \int_0^1 |f(t)|^2 |h(t)|^2 \, dt.
+\end{split}
+\end{align}
+Thus if $|h(t)| = 1$ for every $0 \leq t \leq 1$, (\ref{eq:1}) implies that for any $f \in V$,
+\begin{equation*}
+\Vert T(f) \Vert^2 = \int_0^1 |f(t)|^2 \, dt = \int_0^1 f(t) \overline{f(t)} \, dt = \langle f, f \rangle = \Vert f \Vert^2,
+\end{equation*}
+so that $\Vert T(f) \Vert = \Vert f \Vert$. Hence $T$ is unitary. Conversely, suppose that $T$ is unitary, so that $\Vert T(f) \Vert = \Vert f \Vert$ for any $f \in V$. Thus (\ref{eq:1}) implies that
+\begin{equation} \label{eq:2}
+0 = \Vert T(f) \Vert^2 - \Vert f \Vert^2 = \int_0^1 |f(t)|^2 |h(t)|^2 \, dt - \int_0^1 |f(t)|^2 \, dt = \int_0^1 |f(t)|^2 (|h(t)|^2 - 1) \, dt.
+\end{equation}
+But in order for (\ref{eq:2}) to hold for every choice of $f \in V$, we must have $|h(t)|^2 - 1 = 0$ for every $0 \leq t \leq 1$, so that $|h(t)| = 1$ for every $0 \leq t \leq 1$. (The fact that $|h(t)| = 1$ must hold for \emph{every} $0 \leq t \leq 1$ rather than for \emph{almost every} $0 \leq t \leq 1$ follows from the continuity of $h$).
+
+\item
+Since $T$ is unitary, Cor. 2 to Thm. 6.18 implies that there exists an ordered orthonormal basis $\beta = \{v_1, \dots, v_n\}$ for $V$ where, for each $1 \leq i \leq n$, the eigenvalue $\lambda_i$ corresponding to $v_i$ satisfies $|\lambda_i| = 1$. Thus we can write
+\begin{equation*}
+[T]_\beta = \begin{pmatrix}
+\lambda_1 & 0 & 0 & \cdots & 0 \\
+0 & \lambda_2 & 0 & \cdots & 0 \\
+0 & 0 & \lambda_3 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & 0 & \lambda_n
+\end{pmatrix}.
+\end{equation*}
+Define a linear operator $U : V \to V$ by
+\begin{equation*}
+[U]_\beta = \begin{pmatrix}
+\lambda_1^{1/2} & 0 & 0 & \cdots & 0 \\
+0 & \lambda_2^{1/2} & 0 & \cdots & 0 \\
+0 & 0 & \lambda_3^{1/2} & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & 0 & \lambda_n^{1/2}
+\end{pmatrix}.
+\end{equation*}
+Then since $[U]_\beta^2 = [T]_\beta$, $U^2 = T$. Furthermore, for any $1 \leq i \leq n$, $U(v_i) = \lambda_i^{1/2} v_i$ by construction, and since $|\lambda_i^{1/2}| = 1$, we see that $U$ is unitary by Cor. 2 to Thm. 6.18.
+
+\end{enumerate}
+
+\end{document}

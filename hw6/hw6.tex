@@ -1,0 +1,289 @@
+\documentclass[12pt]{article}
+\usepackage[top=0.9in, bottom=0.9in, left=0.5in, right=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+
+\setenumerate{parsep=0em, listparindent=\parindent}
+
+% Reset equation numbering for each new item in an enumerate environment.
+\makeatletter
+\@addtoreset{equation}{enumi}
+\makeatother
+
+% Hacky macro to reset equation numbering within sections and subsections. See:
+% https://tex.stackexchange.com/questions/264335/when-using-section-counters-dont-reset-properly-how-to-fix-this
+\makeatletter
+\def\nullstepcounter#1{%
+	\begingroup
+		\let\@elt\@stpelt
+		\csname cl@#1\endcsname
+	\endgroup}
+\makeatother
+
+\counterwithin*{equation}{section}
+\counterwithin*{equation}{subsection}
+
+\DeclareMathOperator{\rank}{rank}
+
+\title{Homework 6}
+\author{Benjamin Noland}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Section 5.1}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item
+\begin{enumerate}
+\setcounter{enumii}{1}
+\item
+\begin{enumerate}[label=(\roman*)]
+\item
+We compute
+\begin{align*}
+\det(tI_3 - A)
+&= \det\begin{pmatrix}
+t & 2 & 3 \\
+1 & t - 1 & 1 \\
+-2 & -2 & t - 5
+\end{pmatrix} \\
+&= t \det\begin{pmatrix}
+t - 1 & 1 \\
+-2 & t - 5
+\end{pmatrix}
+-2 \det\begin{pmatrix}
+1 & 1 \\
+-2 & t - 5
+\end{pmatrix}
++3 \det\begin{pmatrix}
+1 & t - 1 \\
+-2 & -2
+\end{pmatrix} \\
+&= t^3 - 6t^2 + 11t - 6 = (t - 3)(t - 2)(t - 1).
+\end{align*}
+By setting this expression equal to zero and solving for $t$ we find the eigenvalues of $A$ to be $\lambda_1 = 1$, $\lambda_2 = 2$, and $\lambda_3 = 3$.
+
+\item
+{\it Eigenvectors corresponding to $\lambda_1$}:
+
+Let
+\begin{equation*}
+B_1 = A - \lambda_1 I_3
+= \begin{pmatrix}
+-1 & -2 & -3 \\
+-1 & 0 & -1 \\
+2 & 2 & 4
+\end{pmatrix}.
+\end{equation*}
+Through a series of elementary row operations, we find that the homogeneous system of linear equations defined by $B_1$ is equivalent to the homogeneous system defined by the matrix
+\begin{equation*}
+\begin{pmatrix}
+1 & 0 & 1 \\
+0 & 1 & 1 \\
+0 & 0 & 0
+\end{pmatrix}.
+\end{equation*}
+The solution set of this system is simply $\ker(L_{B_1})$. Thus we find that
+\begin{equation*}
+\ker(L_{B_1}) = \left\{
+\begin{pmatrix}
+-x \\
+-x \\
+x
+\end{pmatrix} : x \in \mathbb{R}
+\right\}
+\end{equation*}
+In particular, $v \in \mathbb{R}^3$ is an eigenvector of $A$ corresponding to $\lambda_1$ if and only if
+\begin{equation*}
+v = \begin{pmatrix}
+-x \\
+-x \\
+x
+\end{pmatrix} \text{ for some } x \in \mathbb{R}^3, x \neq 0.
+\end{equation*}
+
+\noindent{\it Eigenvectors corresponding to $\lambda_2$}:
+
+Let
+\begin{equation*}
+B_2 = A - \lambda_2 I_3
+= \begin{pmatrix}
+-2 & -2 & -3 \\
+-1 & -1 & -1 \\
+2 & 2 & 3
+\end{pmatrix}.
+\end{equation*}
+Through the same sort of computations as performed above, we find that
+\begin{equation*}
+\ker(L_{B_2}) = \left\{
+\begin{pmatrix}
+x \\
+-x \\
+0
+\end{pmatrix} : x \in \mathbb{R}
+\right\}.
+\end{equation*}
+In particular, $v \in \mathbb{R}^3$ is an eigenvector of $A$ corresponding to $\lambda_2$ if and only if
+\begin{equation*}
+v = \begin{pmatrix}
+x \\
+-x \\
+0
+\end{pmatrix} \text{ for some } x \in \mathbb{R}^3, x \neq 0.
+\end{equation*}
+
+\noindent{\it Eigenvectors corresponding to $\lambda_3$}:
+
+Let
+\begin{equation*}
+B_3 = A - \lambda_3 I_3
+= \begin{pmatrix}
+-3 & -2 & -3 \\
+-1 & -2 & -1 \\
+2 & 2 & 2
+\end{pmatrix}.
+\end{equation*}
+Through the same sort of computations as performed above, we find that
+\begin{equation*}
+\ker(L_{B_3}) = \left\{
+\begin{pmatrix}
+x \\
+0 \\
+-x
+\end{pmatrix} : x \in \mathbb{R}
+\right\}.
+\end{equation*}
+In particular, $v \in \mathbb{R}^3$ is an eigenvector of $A$ corresponding to $\lambda_3$ if and only if
+\begin{equation*}
+v = \begin{pmatrix}
+x \\
+0 \\
+-x
+\end{pmatrix} \text{ for some } x \in \mathbb{R}^3, x \neq 0.
+\end{equation*}
+
+\item
+Let
+\begin{equation*}
+v_1 = \begin{pmatrix}
+-1 \\
+-1 \\
+1
+\end{pmatrix},
+v_2 = \begin{pmatrix}
+1 \\
+-1 \\
+0
+\end{pmatrix}, \text{and }
+v_3 = \begin{pmatrix}
+1 \\
+0 \\
+-1
+\end{pmatrix}.
+\end{equation*}
+Then for each $1 \leq i \leq 3$, $v_i$ is an eigenvector of $A$ corresponding to the eigenvalue $\lambda_i$. Let $\beta' = \{v_1, v_2, v_3\}$. It is a simple matter to check that $\beta'$ is linearly independent, and since $\beta'$ contains precisely $\dim(\mathbb{R}^3) = 3$ elements, it is therefore an ordered basis for $\mathbb{R}^3$ (by part (b) of Cor. 2 to Thm. 1.10).
+
+\item
+Let $\beta = \{\epsilon_1, \epsilon_2, \epsilon_3\}$ be the standard ordered basis for $\mathbb{R}^3$. Consider the linear operator $L_A : \mathbb{R}^3 \to \mathbb{R}^3$. By definition, $[L_A]_\beta = A$. Furthermore, since by definition the eigenvectors of $A$ are precisely those of $L_A$ (see pg. 246), we have
+\begin{equation*}
+[L_A]_{\beta'} = \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 2 & 0 \\
+0 & 0 & 3
+\end{pmatrix}.
+\end{equation*}
+By Thm. 2.23, $[L_A]_{\beta'} = Q^{-1}[L_A]_\beta Q$, where $Q$ is the change of coordinate matrix that changes $\beta'$-coordinates into $\beta$-coordinates. Since
+\begin{align*}
+v_1 &= (-1)\epsilon_1 + (-1)\epsilon_2 + 1\epsilon_3 \\
+v_2 &= 1\epsilon_1 + (-1)\epsilon_2 + 0\epsilon_3 \\
+v_3 &= 1\epsilon_1 + 0\epsilon_2 + (-1)\epsilon_3,
+\end{align*}
+we find that
+\begin{equation*}
+Q = \begin{pmatrix}
+-1 & 1 & 1 \\
+-1 & -1 & 0 \\
+1 & 0 & -1
+\end{pmatrix}.
+\end{equation*}
+Finally, if we let $D = [L_A]_{\beta'}$, we have the relation $D = Q^{-1} A Q$, as desired.
+
+\end{enumerate}
+
+\end{enumerate}
+\setcounter{enumi}{19}
+\item
+By definition the characteristic polynomial $f$ of $A$ is given by $f(t) = \det(A - tI_n)$. We therefore have
+\begin{equation*}
+f(t) = \det(A - tI_n) = (-1)^n t^n +a_{n-1} t^{n-1} + \cdots + a_1 t + a_0
+\end{equation*}
+Substituting $t = 0$ into this expression we see that $f(0) = \det(A) = a_0$, as desired. Since $A$ is invertible if and only $\det(A) \neq 0$ by the Cor. to Thm. 4.7, we therefore see that $A$ is invertible if and only if $a_0 \neq 0$.
+
+\setcounter{enumi}{21}
+\item
+\begin{enumerate}
+\item
+Write
+\begin{equation*}
+g(t) = \sum_{k=0}^n a_k t^k.
+\end{equation*}
+Then
+\begin{equation} \label{eq:1}
+g(T)(x) = \left(\sum_{k=0}^n a_k T^k\right)(x) = \sum_{k=0}^n a_k T^k(x),
+\end{equation}
+where for any $k \geq 0$, $T^k$ denotes $T$ composed with itself $k$ times ($T^0$ is defined to be the identity map $I_V : V \to V$). Note that $T^0(x) = I_V(x) = x = \lambda^0 x$. If we assume that $T_k(x) = \lambda^k x$ for some $k > 0$, then
+\begin{equation*}
+T^{k+1}(x) = T(T^k(x)) = T(\lambda^k x) = \lambda^k T(x) = \lambda^k (\lambda x) = \lambda^{k+1} x.
+\end{equation*}
+Thus $T^k(x) = \lambda^k x$ for every $k \geq 0$ by induction. In particular (\ref{eq:1}) becomes
+\begin{equation*}
+g(T)(x) = \sum_{k=0}^n a_k T^k(x) = \sum_{k=0}^n a_k \lambda^k x = \left(\sum_{k=0}^n a_k \lambda^k\right) x = g(\lambda) x.
+\end{equation*}
+
+\end{enumerate}
+
+\setcounter{enumi}{21}
+
+\end{enumerate}
+
+\section*{Section 5.2}
+
+\begin{enumerate}
+\setcounter{enumi}{3}
+\item
+Let $A \in M_{n \times n}(F)$, and suppose that $A$ has $n$ distinct eigenvalues. Note that the eigenvalues and eigenvectors of $A$ are defined to be those of the linear operator $L_A : F^n \to F^n$, and that $A$ is said to be diagonalizable if and only if $L_A$ is diagonalizable (see pgs. 245-246). Thus by assumption, $L_A$ has $n$ distinct eigenvalues, and since $\dim(F^n) = n$, $L_A$ is diagonalizable by the Cor. to Thm. 5.5. This means that $A$ is diagonalizable.
+
+\setcounter{enumi}{8}
+\item
+\begin{enumerate}
+\item
+Let $n = \dim(V)$ and let $A = [T]_\beta$. By definition, the characteristic polynomial $f$ of $T$ is given by $f(t) = \det(A - tI_n)$. By assumption, $A$ is an upper triangular matrix, and thus so is $(A - tI_n)$. The determinant of $(A - tI_n)$ is therefore simply the product of its diagonal entries $(A_{ii} - t)$, $1 \leq i \leq n$. Thus we have the following:
+\begin{equation*}
+f(t) = \det(A - tI_n) = \prod_{i=1}^n (A_{ii} - t) = \prod_{i=1}^n (-1)(t - A_{ii}) = (-1)^n \prod_{i=1}^n (t - A_{ii}).
+\end{equation*}
+We therefore see that the characteristic polynomial $f$ of $T$ splits.
+
+\end{enumerate}
+\setcounter{enumi}{11}
+\item
+\begin{enumerate}
+\item
+Note that since $T$ is invertible, $T$ does not have zero as an eigenvalue, and that $\lambda \neq 0$ is an eigenvalue of $T$ if and only if $\lambda^{-1}$ is an eigenvalue of $T^{-1}$ (by exercise 8 of section 5.1 -- cited in the statement of this problem). Let $\lambda$ be an eigenvalue of $T$. Then $\lambda \neq 0$, so that $\lambda^{-1}$ exists, and $\lambda^{-1}$ is an eigenvalue of $T^{-1}$. Let $E_\lambda$ denote the eigenspace of $T$ corresponding to $\lambda$, and let $E^{-1}_{\lambda^{-1}}$ denote the eigenspace of $T^{-1}$ corresponding to $\lambda^{-1}$. Then since for any $x \in V$, $T(x) = \lambda x$ if and only if $T^{-1}(x) = \lambda^{-1} x$, we have the following:
+\begin{equation*}
+E_\lambda = \{x \in V : T(x) = \lambda x\} = \{x \in V : T^{-1}(x) = \lambda^{-1} x\} = E^{-1}_{\lambda^{-1}}.
+\end{equation*}
+
+\item
+Suppose $T$ is diagonalizable, and let $\lambda_1, \dots, \lambda_k$ be the distinct eigenvalues of $T$. For each $1 \leq i \leq k$, let $\beta_i$ be an ordered basis for the eigenspace $E_{\lambda_i}$. Then by Thm. 5.9, $\beta = \beta_1 \cup \cdots \cup \beta_k$ is an ordered basis for $V$ (with the natural ordering -- see the footnote on pg. 268) consisting of eigenvectors of $T$. But since $E_{\lambda_i} = E^{-1}_{\lambda^{-1}_i}$ for every $1 \leq i \leq k$, $\beta$ is also an ordered basis for $V$ consisting of eigenvectors of $T^{-1}$. Thus $[T^{-1}]_\beta$ is a diagonal matrix, so that $T^{-1}$ is diagonalizable.
+
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}

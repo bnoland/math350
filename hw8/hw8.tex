@@ -1,0 +1,439 @@
+\documentclass[12pt]{article}
+\usepackage[top=0.9in, bottom=0.9in, left=0.5in, right=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+\usepackage{tikz}
+
+\setenumerate{parsep=0em, listparindent=\parindent}
+
+% Reset equation numbering for each new item in an enumerate environment.
+\makeatletter
+\@addtoreset{equation}{enumi}
+\makeatother
+
+% Hacky macro to reset equation numbering within sections and subsections. See:
+% https://tex.stackexchange.com/questions/264335/when-using-section-counters-dont-reset-properly-how-to-fix-this
+\makeatletter
+\def\nullstepcounter#1{%
+	\begingroup
+		\let\@elt\@stpelt
+		\csname cl@#1\endcsname
+	\endgroup}
+\makeatother
+
+\counterwithin*{equation}{section}
+\counterwithin*{equation}{subsection}
+
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\spn}{span}
+
+\title{Homework 8}
+\author{Benjamin Noland}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Section 7.1}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item
+\begin{enumerate}
+\setcounter{enumii}{1}
+\item
+Firstly, we compute:
+\begin{align*}
+T(1) &= 0 \\
+T(t) &= 1 \\
+T(t^2) &= 2t \\
+T(e^t) &= e^t \\
+T(te^t) &= e^t + te^t.
+\end{align*}
+From this we see that the linear map $T : V \to V$ is indeed well-defined.
+
+Note that by Thm. 2.34, the set $\gamma = \{1, t, t^2, e^t, te^t, t^2e^t\}$ is a basis for the solution space of the homogeneous linear differential equation with constant coefficients and auxiliary polynomial $t^3(t-1)^3$. In particular, $\gamma$ is a linearly independent subset of the solution space. Thus since $\beta \subseteq \gamma$, $\beta$ is also a linearly independent subset of the solution space by the Cor. to Thm. 1.6. This means that for any $a_1, a_2, \dots, a_5 \in \mathbb{C}$, if
+\begin{equation*}
+0 = a_1 + a_2 t + a_3 t^2 + a_4 e^t + a_5 te^t 
+\end{equation*}
+then $a_1 = a_2 = \cdots = a_5 = 0$. In particular, this holds if $a_1, a_2, \dots, a_5 \in \mathbb{R}$. Since $V$ is a vector space over $\mathbb{R}$, we therefore see that $\beta$ is also a linearly independent subset of $V$. Hence since $\beta$ spans $V$ by definition, $\beta$ is an ordered basis for $V$.
+
+The matrix of $T$ in $\beta$ is given by
+\begin{equation*}
+A = [T]_\beta = \begin{pmatrix}
+0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 2 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 \\
+0 & 0 & 0 & 0 & 1
+\end{pmatrix}.
+\end{equation*}
+Thus we compute the characteristic polynomial $f$ of $T$ to be
+\begin{equation*}
+f(t) = \det(A - tI_5) = \det\begin{pmatrix}
+-t & 1 & 0 & 0 & 0 \\
+0 & -t & 2 & 0 & 0 \\
+0 & 0 & -t & 0 & 0 \\
+0 & 0 & 0 & 1-t & 1 \\
+0 & 0 & 0 & 0 & 1-t
+\end{pmatrix} = -t^3(t-1)^3.
+\end{equation*}
+Note that $f$ splits. Setting $f(t) = 0$ and solving for $t$, we find the eigenvalues of $T$ to be $\lambda_1 = 0$ (with multiplicity $m_1 = 3$), and $\lambda_2 = 1$ (with multiplicity $m_2 = 2$). Thus by Thm. 7.2, the generalized eigenspaces of $T$ are given by
+\begin{align*}
+K_{\lambda_1} &= \ker(T-0I)^3 \\
+K_{\lambda_2} &= \ker(T-1I)^2
+\end{align*}
+Furthermore, by part (c) of Thm. 7.4, $\dim(K_{\lambda_1}) = m_1 = 3$ and $\dim(K_{\lambda_2}) = m_2 = 2$. Thus by Thm. 7.7, $K_{\lambda_1}$ has an ordered basis consisting of one cycle of length 3, or a union of one cycle of length 1 and one cycle of length 2. Similarly, $K_{\lambda_2}$ must have an ordered basis consisting of one cycle of length 2.
+
+We compute:
+\begin{align*}
+[(T-0I)^3]_\beta &= A^3 = \begin{pmatrix}
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 3 \\
+0 & 0 & 0 & 0 & 1
+\end{pmatrix}
+\xrightarrow{\text{Row reduces to}}
+\begin{pmatrix}
+1 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0
+\end{pmatrix} \\
+[(T-1I)^2]_\beta &= (A-I_5)^2 = \begin{pmatrix}
+1 & -2 & 2 & 0 & 0 \\
+0 & 1 & -4 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0
+\end{pmatrix}
+\xrightarrow{\text{Row reduces to}}
+\begin{pmatrix}
+1 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0
+\end{pmatrix}.
+\end{align*}
+Therefore:
+\begin{align*}
+K_{\lambda_1} &= \spn\{1, t, t^2\} \\
+K_{\lambda_2} &= \spn\{e^t, te^t\}.
+\end{align*}
+Note that $\beta_1 = \{1, t, t^2/2\}$ is a basis for $K_{\lambda_1}$, and that $T(t^2/2) = t$, $T(t) = 1$, and $T(1) = 0$. Thus $\beta_1$ consists of a single cycle of length 3. Similarly, $\beta_2 = \{e^t, te^t\}$ is a basis for $K_{\lambda_2}$, and from the discussion above we know that $\beta_2$ consists of a single cycle of length 2.
+
+Therefore $\beta' = \beta_1 \cup \beta_2 = \{1, t, t^2/2, e^t, te^t\}$ is a Jordan canonical basis for $T$ by part (b) of Thm. 7.5, and so a Jordan canonical form $J$ of $T$ is given by
+\begin{equation*}
+J = \begin{pmatrix}
+0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 \\
+0 & 0 & 0 & 0 & 1 \\
+\end{pmatrix}.
+\end{equation*}
+
+\end{enumerate}
+
+\setcounter{enumi}{8}
+\item
+\begin{enumerate}
+\setcounter{enumii}{1}
+\item
+Since $\beta$ is linearly independent, and $\beta' = \beta \cap K_\lambda \subseteq \beta$, the Cor. to Thm. 1.6 implies that $\beta'$ is linearly independent as well. Let $\lambda_1, \dots, \lambda_k$ denote the distinct eigenvalues of $T$. Since $\beta$ is a Jordan canonical basis for $T$, $\beta = \beta_1 \cup \cdots \cup \beta_k$, where for each $1 \leq i \leq k$, $\beta_i$ is an ordered basis for $K_{\lambda_i}$ consisting of a union of disjoint cycles of generalized eigenvalues corresponding to $\lambda_i$. Thus if $\lambda = \lambda_j$,
+\begin{equation*}
+\beta' = \beta \cap K_\lambda = (\beta_1 \cup \cdots \cup \beta_k) \cap K_{\lambda_j} = (\beta_1 \cap K_{\lambda_j}) \cup \cdots \cup (\beta_k \cap K_{\lambda_j}) \supseteq (\beta_j \cap K_{\lambda_j}) = \beta_j.
+\end{equation*}
+Thus $\spn\beta' \supseteq \spn\beta_j = K_\lambda$. But since $\beta' \subseteq K_\lambda$, $\spn\beta' \subseteq K_\lambda$ as well. Thus $\spn\beta' = K_\lambda$, so that $\beta'$ is a basis for $K_\lambda$.
+
+\end{enumerate}
+
+\setcounter{enumi}{10}
+\item
+Let $A \in M_{n \times n}(F)$ be a matrix whose characteristic polynomial splits. Note that the characteristic polynomial of $A$ is precisely that of the linear operator $L_A : F^n \to F^n$. Thus $L_A$ has a Jordan canonical form by Cor. 1 to Thm. 7.7; that is, there exists an ordered basis $\beta'$ for $F^n$ such that $J = [L_A]_{\beta'}$ is a Jordan canonical form. Thus by definition, $A$ has a Jordan canonical form as well, and by Thm. 2.23 there exists an invertible matrix $Q$ satisfying
+\begin{equation*}
+A = [L_A]_\beta = Q^{-1} [L_A]_{\beta'} Q = Q^{-1} J Q,
+\end{equation*}
+where $\beta$ is the standard ordered basis for $F^n$. Thus $A$ is similar to $J$.
+
+\end{enumerate}
+
+\section*{Section 7.2}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item
+\begin{enumerate}
+\item
+Let $J$ denote the Jordan canonical form of $T$ (given in the problem statement). Then the characteristic polynomial $f$ of $T$ is given by
+\begin{equation*}
+f(t) = \det(J - tI_7) = \det\begin{pmatrix}
+2 - t & 1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 2 - t & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 2 - t & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 2 - t & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 2 - t & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 3 - t & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 3 - t
+\end{pmatrix} = (2 - t)^5(3 - t)^2.
+\end{equation*}
+
+\item
+Solving $f(t) = 0$ for $t$, we find the eigenvalues of $T$ to be $\lambda_1 = 2$ (with multiplicity $m_1 = 5$), and $\lambda_2 = 3$ (with multiplicity $m_2 = 2$). By observing the Jordan canonical form $J$, we see that $K_{\lambda_1}$ has a basis consisting of the union of two disjoint cycles (one of length 3, and one of length 2). We also see that $K_{\lambda_2}$ has a basis consisting of the union of two disjoint cycles (each of length 1). The dot diagram corresponding to $\lambda_1$ is therefore:
+
+\medskip
+\begin{tikzpicture}
+\filldraw [black] (0,0) circle (2pt);
+\filldraw [black] (0,0.3) circle (2pt);
+\filldraw [black] (0,0.6) circle (2pt);
+\filldraw [black] (0.3,0.3) circle (2pt);
+\filldraw [black] (0.3,0.6) circle (2pt);
+\end{tikzpicture}
+
+\medskip
+\noindent and the dot diagram corresponding to $\lambda_2$ is:
+
+\medskip
+\begin{tikzpicture}
+\filldraw [black] (0,0) circle (2pt);
+\filldraw [black] (0.3,0) circle (2pt);
+\end{tikzpicture}
+
+\item
+As discussed in part (b), $K_{\lambda_2}$ has a basis consisting of two disjoint cycles of generalized eigenvectors of $T$ corresponding to $\lambda_2$, each of length 1. Since any such cycle contains precisely one eigenvector of $T$ corresponding to $\lambda_2$ (see the discussion at the bottom of pg. 488), we see that $K_{\lambda_2}$ has a basis consisting solely of eigenvalues of $T$ corresponding to $\lambda_2$. It follows that $K_{\lambda_2} = E_{\lambda_2}$.
+
+\item
+This is immediate from Thm. 7.9 and the dot diagrams computed in part (b). Since the dot diagram for $\lambda_1$ has 3 rows, Thm. 7.9 implies that $K_{\lambda_1} = \ker(T - \lambda_1I)^3$, so that $p_1 = 3$. Similarly, the dot diagram for $\lambda_2$ has 1 row, and therefore $K_{\lambda_2} = \ker(T - \lambda_2I)$, so that $p_2 = 1$.
+
+\item
+\begin{enumerate}[label=(\roman*)]
+\item
+\begin{align*}
+\rank(U_1) &= \rank\begin{pmatrix}
+0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 \\
+0 & 0 & 0 & 0 & 0
+\end{pmatrix} = 3 \\
+\rank(U_2) &= \rank\begin{pmatrix}
+0 & 0 \\
+0 & 0
+\end{pmatrix} = 0
+\end{align*}
+
+\item
+\begin{align*}
+\rank(U_1^2) &= \rank\begin{pmatrix}
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0
+\end{pmatrix} = 1 \\
+\rank(U_2^2) &= \rank\begin{pmatrix}
+0 & 0 \\
+0 & 0
+\end{pmatrix} = 0
+\end{align*}
+
+\item
+By the Dimension Thm. and part (c) of Thm. 7.4:
+\begin{align*}
+\nullity(U_1) &= \dim(K_{\lambda_1}) - \rank(U_1) = m_1 - \rank(U_1) = 5 - 3 = 2 \\
+\nullity(U_2) &= \dim(K_{\lambda_2}) - \rank(U_2) = m_2 - \rank(U_2) = 2 - 0 = 2
+\end{align*}
+
+\item
+By the Dimension Thm. and part (c) of Thm. 7.4:
+\begin{align*}
+\nullity(U_1^2) &= \dim(K_{\lambda_1}) - \rank(U_1^2) = m_1 - \rank(U_1^2) = 5 - 1 = 4 \\
+\nullity(U_2^2) &= \dim(K_{\lambda_2}) - \rank(U_2^2) = m_2 - \rank(U_2^2) = 2 - 0 = 2
+\end{align*}
+
+\end{enumerate}
+
+\end{enumerate}
+
+\setcounter{enumi}{13}
+\item
+By the Cayley-Hamilton Thm., $(-1)^nT^n = 0$, where $0$ denotes the zero linear operator on $V$. In particular, we see that $T^n = 0$, so that $T$ is nilpotent.
+
+\setcounter{enumi}{18}
+\item
+\begin{enumerate}
+\item
+I will proceed by induction on $r$. When $r = 1$ it is clear from observation that
+\begin{equation} \label{eq:1}
+N_{ij}^r = \begin{cases}
+1 & \text{if } j = i + r \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation}
+holds for any $1 \leq i, j \leq m$. Now suppose that (\ref{eq:1}) holds for some $1 < r < m$. Then for any $1 \leq i, j \leq m$,
+\begin{equation*}
+N_{ij}^r = [N N^r]_{ij} = \sum_{k=1}^m N_{ik} N_{kj}^r = N_{i,i+1} N_{i+1,j}^r = N_{i+1,j}^r
+= \begin{cases}
+1 & \text{if } j = i + (r + 1) \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+Thus (\ref{eq:1}) holds for any $1 \leq r < m$ by induction. In particular, it holds when $r = m - 1$. Thus for any $1 \leq i, j \leq m$,
+\begin{equation} \label{eq:2}
+N_{ij}^{m-1} = \begin{cases}
+1 & \text{if } j = i + (m - 1) \\
+0 & \text{otherwise}
+\end{cases}
+= \begin{cases}
+1 & \text{if } i = 1, j = m \\
+0 & \text{otherwise}
+\end{cases},
+\end{equation}
+and therefore
+\begin{equation*}
+N_{ij}^m = [N N^{m-1}]_{ij} = \sum_{k=1}^m N_{ik} N_{kj}^{m-1} = N_{i,i+1} N_{i+1,j}^{m-1} = 0,
+\end{equation*}
+since $N_{i+1,j}^{m-1} = 0$ by way of (\ref{eq:2}). Thus $N^m = O$.
+
+\end{enumerate}
+
+\end{enumerate}
+
+\section*{Section 7.3}
+
+\begin{enumerate}
+\setcounter{enumi}{12}
+\item
+%Let $V$ denote the underlying vector space. Then
+%\begin{equation} \label{eq:1}
+%V = K_{\lambda_1} \oplus \cdots \oplus K_{\lambda_k}
+%\end{equation}
+%by Thm. 7.8.
+Let
+\begin{equation} \label{eq:1}
+J = \begin{pmatrix}
+J_1 & O & O & \cdots & O \\
+O & J_2 & O & \cdots & O \\
+O & O & J_3 & \cdots & O \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+O & O & O & \cdots & J_k
+\end{pmatrix}
+\end{equation}
+denote a Jordan canonical form of $T$, where for each $1 \leq i \leq k$, $J_i$ is the collection of Jordan blocks associated with $\lambda_i$. Let $1 \leq i \leq k$. Then there exists an ordered basis $\beta_i$ for $K_{\lambda_i}$ such that $J_i = [T_{K_{\lambda_i}}]_{\beta_i}$, where $\beta_i$ consists of a union of disjoint cycles $\gamma_1, \dots, \gamma_m$. For each $1 \leq j \leq m$, let $W_j = \spn \gamma_j$, so that $A_j = [T_{W_j}]_{\gamma_j}$ is a Jordan block by part (a) of Thm. 7.5. So we have the following:
+\begin{equation*}
+J_i = [T_{K_{\lambda_i}}]_{\beta_i} = \begin{pmatrix}
+A_1 & O & O & \cdots & O \\
+O & A_2 & O & \cdots & O \\
+O & O & A_3 & \cdots & O \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+O & O & O & O & A_m
+\end{pmatrix}.
+\end{equation*}
+For each $1 \leq j \leq m$, let $q_j$ denote the order of the block $A_j$. Then by part (a) of exercise 19 of section 7.2,
+\begin{equation*}
+(A_j - \lambda_i I)^r \neq 0 \quad \text{if} \quad 1 \leq r < q_j, \quad \text{and} \quad (A_j - \lambda_i I)^{q_j} = O.
+\end{equation*}
+Let $p_i$ denote the order of the largest Jordan block corresponding to $\lambda_i$. Since for any integer $n \geq 0$,
+\begin{equation*}
+(J_i - \lambda_i I)^n = \begin{pmatrix}
+(A_1 - \lambda_iI)^n & O & O & \cdots & O \\
+O & (A_2 - \lambda_iI)^n & O & \cdots & O \\
+O & O & (A_3 - \lambda_iI)^n & \cdots & O \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+O & O & O & O & (A_m - \lambda_iI)^n
+\end{pmatrix},
+\end{equation*}
+it follows that
+\begin{equation} \label{eq:2}
+(J_i - \lambda_i I)^r \neq 0 \quad \text{if} \quad 1 \leq r < p_i, \quad \text{and} \quad (J_i - \lambda_i I)^{p_i} = O.
+\end{equation}
+Note that since $\lambda_i$ is the sole eigenvalue of $J_i$, the minimal polynomial of $J_i$ must have $\lambda_i$ as its only root by Thm. 7.14. Thus (\ref{eq:2}) implies that $(t - \lambda_i)^{p_i}$ is the minimal polynomial of $J_i$. Moreover, by (\ref{eq:1}) the minimal polynomial of $J$ is the least common multiple of the minimal polynomials of $J_1, \dots, J_k$ (a result discussed in class). Thus, since the least common multiple of the polynomials $(t - \lambda_1I)^{p_1}, \dots, (t - \lambda_kI)^{p_k}$ is 1, the minimal polynomial of $T$ is the product
+\begin{equation*}
+(t - \lambda_1I)^{p_1} \cdots (t - \lambda_kI)^{p_k}.
+\end{equation*}
+
+\setcounter{enumi}{13}
+\item
+Let $V = \mathbb{R}^3$, and consider the identity linear operator $I : V \to V$. Let $\beta = \{e_1, e_2, e_3\}$ denote the standard ordered basis for $V$. Note that $V = W_1 \oplus W_2$, where $W_1 = \spn\{e_1, e_2\}$ and $W_2 = \spn\{e_3\}$. Since
+\begin{equation*}
+[I]_\beta = \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{pmatrix},
+\end{equation*}
+the minimal polynomial of $I$ is $p(t) = t - 1$ by Thm. 7.16. Note that $\beta_1 = \{e_1, e_2\}$ and $\beta_2 = \{e_3\}$ are bases for $W_1$ and $W_2$, respectively. Thus
+\begin{equation*}
+[I_{W_1}]_{\beta_1} = \begin{pmatrix}
+1 & 0 \\
+0 & 1
+\end{pmatrix} \quad \text{and} \quad
+[I_{W_2}]_{\beta_2} = \begin{pmatrix}
+1
+\end{pmatrix}
+\end{equation*}
+and so by Thm. 7.16 the minimal polynomials of $I_{W_1}$ and $I_{W_2}$ are $p_1(t) = t - 1$ and $p_2(t) = t - 1$, respectively. Thus $p(t) \neq p_1(t) p_2(t)$, and so the result does not hold in general.
+
+\end{enumerate}
+
+\section*{Additional problem}
+
+Let $T : F^4 \to F^4$ be a linear operator satisfying $T^3 = T^2$. Then we can write
+\begin{equation*}
+0 = T^3 - T^2 = T^2(T - I) = g(T),
+\end{equation*}
+where $0$ denotes the zero linear operator on $F^4$, and $g$ is the polynomial $g(t) = t^2(t - 1)$. Thus by part (a) of Thm. 7.12, the minimal polynomial $p$ of $T$ divides $g$. In particular, any root of $p$ is a root of $g$. By Thm. 7.14, the roots of $p$ are precisely the eigenvalues of $T$. Thus the possible eigenvalues of $T$ are the roots of $g$: $\lambda_1 = 0$ and $\lambda_2 = 1$.
+
+Furthermore, any Jordan canonical form $J$ of $T$ must satisfy $J^3 = J^2$, or $g(J) = J^2(J-I) = O$. Thus the minimal polynomial $q$ of $J$ must divide $g$ by way of part (a) of Thm. 7.12. Thus
+\begin{equation*}
+q(t) = t^{k_1}(t-1)^{k_2}
+\end{equation*}
+for some integers $0 \leq k_1 \leq 2$ and $0 \leq k_2 \leq 1$. By exercise 13 of section 7.3, this means that every block of $J$ associated with $\lambda_1 = 0$ must be of order 1 or 2, and that every block associated with $\lambda_2 = 1$ must be of order 1.
+
+In enumerating the possible Jordan canonical forms of $T$, there are several cases to consider. Note that in each case, either the blocks associated with $\lambda_1$ are furthest to the left in the Jordan canonical form, or those associated with $\lambda_2$ are furthest to the left (see the discussion on uniqueness of Jordan canonical forms on pg. 497).
+\begin{itemize}
+\item
+{\it The only eigenvalue of $T$ is $\lambda_1 = 0$.} In this case the Jordan canonical form of $T$ must have either 4 blocks of order 1, 2 blocks of order 1 and 1 block of order 2, or 2 blocks of order 2 associated with $\lambda_1$. Thus in this case there are a total of 3 possible Jordan canonical forms.
+%In this case the Jordan canonical form of $T$ has either 1, 2, 3, or 4 distinct blocks associated with $\lambda_1$. Thus in this case are a total of 4 possible Jordan canonical forms.
+
+\item
+{\it The only eigenvalue of $T$ is $\lambda_2 = 1$.} In this case the Jordan canonical form of $T$ must have 4 blocks of order 1 associated with $\lambda_2$. Thus in this case there is only 1 possible Jordan canonical form.
+%In this case the Jordan canonical form of $T$ has either 1, 2, 3, or 4 distinct blocks associated with $\lambda_2$. Thus in this case are a total of 4 possible Jordan canonical forms.
+
+\item
+{\it The eigenvalues of $T$ are $\lambda_1 = 0$ and $\lambda_2 = 1$.} There are several subcases to consider here.
+\begin{itemize}
+\item
+{\it There is only 1 block associated with $\lambda_1$.} If the block associated with $\lambda_1$ is of order 1, then there must be exactly 3 blocks of order 1 associated with $\lambda_2$. If the block associated with $\lambda_1$ is of order 2, then there must be exactly 2 blocks of order 1 associated with $\lambda_2$. Since either the blocks associated with $\lambda_1$ are furthest left, or those associated with $\lambda_2$ are furthest left, we see that there are $2 \times 2 = 4$ possible Jordan canonical forms in this case.
+%Thus there are 2 possible Jordan canonical forms in this case.
+%Then there must be either 1, 2, or 3 distinct blocks associated with $\lambda_2$.
+
+\item
+{\it There are 2 blocks associated with $\lambda_1$.} If there are 2 blocks of order 1 associated with $\lambda_1$, then there must be exactly 2 blocks of order 1 associated with $\lambda_2$. If there is 1 block of order 2 and 2 blocks of order 1 associated with $\lambda_1$, then there must be exactly 1 block of order 1 associated with $\lambda_2$. Finally, if there are 2 blocks of order 2 associated with $\lambda_1$, then there cannot be any blocks associated with $\lambda_2$. Since either the blocks associated with $\lambda_1$ are furthest left, or those associated with $\lambda_2$ are furthest left, we see that there are $2 \times 2 + 1 = 5$ possible Jordan canonical forms in this case.
+%Thus there are 3 possible Jordan canonical forms in this case.
+%Then there must be either 1 or 2 distinct blocks associated with $\lambda_2$.
+
+\item
+{\it There are 3 blocks associated with $\lambda_1$.} If there are 3 blocks of order 1 associated with $\lambda_1$, then there must be exactly 1 block of order 1 associated with $\lambda_2$. If there is 1 block of order 2 and 2 blocks of order 1 associated with $\lambda_1$, then there then there cannot be any blocks associated with $\lambda_2$. Since either the blocks associated with $\lambda_1$ are furthest left, or those associated with $\lambda_2$ are furthest left, we see that there are $2 \times 1 + 1 = 3$ possible Jordan canonical forms in this case.
+%Thus there are 2 possible Jordan canonical forms in this case.
+%Then there must be only 1 block associated with $\lambda_2$.
+
+\item
+{\it There are 4 blocks associated with $\lambda_1$.} Then there must be 4 blocks of order 1 associated with $\lambda_1$, and no blocks associated with $\lambda_2$. Thus there is only 1 possible Jordan canonical form in this case.
+
+\end{itemize}
+%Finally, either the blocks associated with $\lambda_1$ are furthest to the left in the Jordan canonical form, or those associated with $\lambda_2$ are furthest to the left (see the discussion on uniqueness of Jordan canonical forms on pg. 497). Pairing this fact with the enumeration above, we see that there are a total of 14 possible Jordan canonical forms in this case.
+
+\end{itemize}
+%Thus there are at most 4 + 4 + 14 = 22 possible Jordan canonical forms for $T$. To see that there are at least 22 possible Jordan canonical forms for $T$, let $J$ denote any one of the Jordan canonical forms enumerated above. Then the eigenvalues of $J$ are either $\lambda_1 = 0$, $\lambda_2 = 1$, or both.
+
+The total number of possible Jordan canonical forms of $T$ is therefore $3 + 1 + 4 + 5 + 3 + 1 = 17$.
+
+\end{document}

@@ -1,0 +1,274 @@
+\documentclass[12pt]{article}
+\usepackage[top=0.9in, bottom=0.9in, left=0.5in, right=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+
+\setenumerate{parsep=0em, listparindent=\parindent}
+
+% Reset equation numbering for each new item in an enumerate environment.
+\makeatletter
+\@addtoreset{equation}{enumi}
+\makeatother
+
+% Hacky macro to reset equation numbering within sections and subsections. See:
+% https://tex.stackexchange.com/questions/264335/when-using-section-counters-dont-reset-properly-how-to-fix-this
+\makeatletter
+\def\nullstepcounter#1{%
+	\begingroup
+		\let\@elt\@stpelt
+		\csname cl@#1\endcsname
+	\endgroup}
+\makeatother
+
+\counterwithin*{equation}{section}
+\counterwithin*{equation}{subsection}
+
+\DeclareMathOperator{\rank}{rank}
+
+\title{Homework 5}
+\author{Benjamin Noland}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Section 4.1}
+
+\begin{enumerate}
+\setcounter{enumi}{10}
+\item
+Let $A \in M_{2 \times 2}(F)$. Then $A$ is of the form
+\begin{equation*}
+A =
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}.
+\end{equation*}
+Using the various properties of $\delta$ listed in the problem statement, we get the following:
+\begin{align} \label{eq:1}
+\begin{split}
+\delta(A) &=
+\delta \begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
+= a_{11} \delta \begin{pmatrix}
+1 & 0 \\
+a_{21} & a_{22}
+\end{pmatrix}
++ a_{12} \delta \begin{pmatrix}
+0 & 1 \\
+a_{21} & a_{22}
+\end{pmatrix} \\
+&= a_{11} \left[
+a_{21} \delta \begin{pmatrix}
+1 & 0 \\
+1 & 0
+\end{pmatrix}
++ a_{22} \delta \begin{pmatrix}
+1 & 0 \\
+0 & 1
+\end{pmatrix}
+\right]
++ a_{12} \left[
+a_{21} \delta \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
++ a_{22} \delta \begin{pmatrix}
+0 & 1 \\
+0 & 1
+\end{pmatrix}
+\right] \\
+&= a_{11}a_{22} + a_{12}a_{21} \delta \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}.
+\end{split}
+\end{align}
+Furthermore, we have the following:
+\begin{align*}
+0 &= \delta \begin{pmatrix}
+1 & 1 \\
+1 & 1
+\end{pmatrix}
+= \delta \begin{pmatrix}
+1 & 0 \\
+1 & 1
+\end{pmatrix}
++ \delta \begin{pmatrix}
+0 & 1 \\
+1 & 1
+\end{pmatrix} \\
+&= \delta \begin{pmatrix}
+1 & 0 \\
+0 & 1
+\end{pmatrix}
++ \delta \begin{pmatrix}
+1 & 0 \\
+1 & 0
+\end{pmatrix}
++ \delta \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
++ \delta \begin{pmatrix}
+0 & 1 \\
+0 & 1
+\end{pmatrix} \\
+&= \delta \begin{pmatrix}
+1 & 0 \\
+0 & 1
+\end{pmatrix}
++ \delta \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix},
+\end{align*}
+and thus we see that
+\begin{equation*}
+\delta \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
+= -\delta \begin{pmatrix}
+1 & 0 \\
+0 & 1
+\end{pmatrix}
+= -1.
+\end{equation*}
+Using this, (\ref{eq:1}) becomes
+\begin{equation*}
+\delta(A) = a_{11}a_{22} + a_{12}a_{21} \delta \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
+= a_{11}a_{22} - a_{12}a_{21} = \det(A),
+\end{equation*}
+as desired.
+
+\end{enumerate}
+
+\section*{Section 4.2}
+
+\begin{enumerate}
+\setcounter{enumi}{23}
+\item
+Let $A_1, \dots, A_n \in F^{1 \times n}$ denote the row vectors of $A$, and say $A_k = 0$ for some $1 \leq k \leq n$. Then the $n$-linearity of the determinant implies the following:
+\begin{align*}
+\det(A) &= \det(A_1, \dots, A_k, \dots, A_n) \\
+&= \det(A_1, \dots, 0, \dots, A_n) \\
+&= \det(A_1, \dots, 0 + 0, \dots, A_n) \\
+&= \det(A_1, \dots, 0, \dots, A_n) + \det(A_1, \dots, 0, \dots, A_n) \\
+&= 2 \det(A).
+\end{align*}
+Subtracting $\det(A)$ from both ends of this equality we find that $\det(A) = 0$.
+
+\setcounter{enumi}{28}
+\item
+Note that if $E$ is an elementary matrix obtained by performing an elementary row operation on $I$, then $E^t$ is the elementary matrix obtained by performing the corresponding operation on the columns of $I$ (this is immediate from the definition of transpose of a matrix). Thus it suffices to consider elementary matrices of the first form in the discussion below. I will show that the result holds for each type of elementary matrix individually.
+
+{\it Type 1}: Let $E$ be obtained from $I$ by swapping rows $i$ and $j$ of $I$, where $i \neq j$. Note that $E^t$ is obtained from $I$ by performing the same operations on the columns of $I$, i.e., by swapping columns $i$ and $j$ of $I$. But since $I$ is symmetric, it follows that $E^t = E$. In particular, $\det(E^t) = \det(E)$.
+
+{\it Type 2}: Let $E$ be obtained from $I$ by multiplying row $i$ by a scalar $c \neq 0$. Then $E$ is symmetric, so that $E^t = E$. In particular, $\det(E^t) = \det(E)$.
+
+{\it Type 3}: Let $E$ be obtained from $I$ by adding $c \neq 0$ times row $i$ to row $j$, where $i \neq j$. Then $E^t$ can be obtained from $I$ by adding $c$ times column $i$ to column $j$. But note that this is the same as adding $c$ times row $j$ to row $i$. Thus by Thm. 4.6, $\det(E^t) = \det(I) = \det(E)$.
+
+\end{enumerate}
+
+\section*{Section 4.3}
+
+\begin{enumerate}
+\setcounter{enumi}{9}
+\item
+By Thm. 4.7 we have
+\begin{equation*}
+0 = \det(O) = \det(M^k) = \det(M)^k,
+\end{equation*}
+which implies that $\det(M) = 0$.
+
+\setcounter{enumi}{11}
+\item
+By Thm. 4.7 and Thm. 4.8 we have
+\begin{equation*}
+1 = \det(I) = \det(QQ^t) = \det(Q) \det(Q^t) = \det(Q)^2,
+\end{equation*}
+which implies that $\det(Q) = \pm 1$.
+
+\setcounter{enumi}{20}
+\item
+As discussed in class, every square matrix $A$ can be transformed into a diagonal matrix $D$ through a series of elementary row operations of types 1 and 3. Since elementary row operations of type 1 flip the sign of the determinant, and those of type 3 preserve the value of the determinant (see pg. 217), we have $\det(D) = \pm \det(A)$. In particular, if $\det(D) = -\det(A)$, then multipling any row of $D$ by $-1$ -- an elementary row operation of type 2 -- will yield another diagonal matrix $D'$ with $\det(D') = -\det(D) = \det(A)$ (again, see pg. 217). Thus in any case, we see that $A$ can be transformed through elementary row operations into a diagonal matrix $D$ with $\det(D) = \det(A)$.
+
+Say $A$ is an $s \times s$ matrix and $C$ is an $r \times r$ matrix. Then $B$ is an $s \times r$ matrix. Applying the above result to the problem at hand, we see that the $n \times n$ matrix
+\begin{equation*}
+M = \begin{pmatrix}
+A & B \\
+O & C
+\end{pmatrix}
+\end{equation*}
+can be transformed through a series of elementary row operations on the upper $s$ rows to a matrix
+\begin{equation*}
+M' = \begin{pmatrix}
+D & B' \\
+O & C
+\end{pmatrix}
+\end{equation*}
+satisfying $\det(M') = \det(M)$, where $D$ is an $s \times s$ diagonal matrix with $\det(D) = \det(A)$. Explicitly, there exist $n \times n$ elementary matrices $E_1, \dots E_k$ and $s \times s$ elementary matrices $F_1, \dots, F_k$ satisfying
+\begin{equation*}
+E_1 \cdots E_k M
+= E_1 \cdots E_k \begin{pmatrix}
+A & B \\
+O & C
+\end{pmatrix}
+= \begin{pmatrix}
+F_1 \cdots F_k A & F_1 \cdots F_k B \\
+O & C
+\end{pmatrix}
+= \begin{pmatrix}
+D & B' \\
+O & C
+\end{pmatrix}
+= M'
+\end{equation*}
+and $\det(E_1 \dots E_k) = \det(F_1 \dots F_k) = 1$. Similarly, $M'$ can be transformed through a series of elementary row operations on the lower $r$ rows to a matrix
+\begin{equation*}
+M'' = \begin{pmatrix}
+D & B' \\
+O & G
+\end{pmatrix}
+\end{equation*}
+satisfying $\det(M'') = \det(M') = \det(M)$, where $G$ is an $r \times r$ diagonal matrix with $\det(G) = \det(C)$. Let $d_1, \dots, d_s$ denote the diagonal elements of $D$, and let $g_1, \dots g_r$ denote the diagonal elements of $G$. Then $\det(A) = \det(D) = d_1 \cdots d_s$ and $\det(C) = \det(G) = g_1 \cdots g_r$. Therefore, through the $n$-linearity of the determinant,
+\begin{equation*}
+\det(M'') = \det\begin{pmatrix}
+D & B' \\
+O & G
+\end{pmatrix}
+= (d_1 \cdots d_s)(g_1 \cdots g_r) \det\begin{pmatrix}
+I_s & B'' \\
+O & I_r
+\end{pmatrix}
+= \det(A) \det(C) \det\begin{pmatrix}
+I_s & B'' \\
+O & I_r
+\end{pmatrix}
+\end{equation*}
+for some $s \times r$ matrix $B''$, and where $I_s$ and $I_r$ denote the $s \times s$ and $r \times r$ identity matrices, respectively. Since the $n \times n$ matrix
+\begin{equation*}
+N = \begin{pmatrix}
+I_s & B'' \\
+O & I_r
+\end{pmatrix}
+\end{equation*}
+is upper triangular with $1$'s along the diagonal, we see that $\det(N) = 1$, and therefore
+\begin{equation*}
+\det(M) = \det(M'') = \det(A) \det(C) \det(N) = \det(A) \det(C),
+\end{equation*}
+as desired.
+
+\end{enumerate}
+
+\end{document}
